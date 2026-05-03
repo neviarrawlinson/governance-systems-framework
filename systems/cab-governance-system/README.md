@@ -134,3 +134,40 @@ CAB should confirm that the change is ready.
 - Integration with change calendars
 - Exception trend reporting
 - Failed change linkage to RCA
+
+---
+
+## System Flow Diagram
+
+```mermaid
+flowchart TD
+
+A[Change Request Submitted] --> B{All Required Fields Complete?}
+
+B -- No --> C[Return to Submitter]
+B -- Yes --> D[Manager Approval]
+
+D --> E{Security / Compliance Required?}
+
+E -- Yes --> F[Security / Compliance Review]
+E -- No --> G[CAB Readiness Review]
+
+F --> G
+
+G --> H{CAB Criteria Met?}
+
+H -- No --> C
+H -- Yes --> I[CAB Review Meeting]
+
+I --> J{Decision}
+
+J -- Approved --> K[Ready for Implementation]
+J -- Approved with Conditions --> L[Conditional Approval Tracking]
+J -- Deferred --> M[Reschedule / Rework]
+J -- Rejected --> N[Return to Submitter]
+
+L --> K
+
+K --> O[Deployment Scheduled]
+O --> P[Post-Deployment Validation]
+P --> Q[Closed]

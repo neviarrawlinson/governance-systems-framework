@@ -1,4 +1,4 @@
-# Governance Validation Script
+# Governance Validation Script (Interactive Version)
 
 required_fields = [
     "implementation_plan",
@@ -8,6 +8,18 @@ required_fields = [
     "rollback_plan",
     "risk_assessment"
 ]
+
+def get_user_input():
+    change = {}
+
+    print("\n--- Enter Change Request Details ---")
+
+    for field in required_fields:
+        value = input(f"Do you have {field}? (yes/no): ").strip().lower()
+        if value == "yes":
+            change[field] = True
+
+    return change
 
 def validate_change(change):
     missing = [field for field in required_fields if field not in change]
@@ -22,11 +34,6 @@ def validate_change(change):
     else:
         print("✅ Change request is CAB ready")
 
-# Example change request (test case)
-change_request = {
-    "implementation_plan": "Defined",
-    "validation_plan": "Defined",
-    "qa_plan": "Defined"
-}
-
+# Run the program
+change_request = get_user_input()
 validate_change(change_request)

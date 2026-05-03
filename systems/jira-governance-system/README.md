@@ -112,3 +112,38 @@ Manual review → System-enforced governance
 - Dashboard integration for governance metrics  
 - RCA linkage for failed changes  
 - Risk scoring automation  
+
+---
+
+## System Flow Diagram
+
+```mermaid
+flowchart TD
+
+A[Open Change Request] --> B{Required Fields Complete?}
+
+B -- No --> C[Return to Submitter]
+B -- Yes --> D[Manager Approval]
+
+D --> E{Security Review Required?}
+E -- Yes --> F[Security Review]
+E -- No --> G[Compliance Review]
+
+F --> G
+
+G --> H{Compliance Review Required?}
+H -- Yes --> I[Compliance Review]
+H -- No --> J[CAB Readiness Check]
+
+I --> J
+
+J --> K{All Governance Criteria Met?}
+
+K -- No --> C
+K -- Yes --> L[CAB Approval]
+
+L --> M[Implementation]
+
+M --> N[Post-Deployment Validation]
+
+N --> O[Completed]

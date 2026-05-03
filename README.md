@@ -1,52 +1,90 @@
 # Governance Systems Framework
 
-Governance Systems Framework is a practical GRC Engineering project focused on designing governance systems that embed compliance, risk controls, audit readiness, and accountability directly into operational workflows.
+Governance Systems Framework is a GRC Engineering initiative focused on transforming governance from documentation into operational systems.
 
-## Core Idea
+This project demonstrates how compliance, risk management, and audit readiness can be embedded directly into workflows, tooling, and system design.
 
-Traditional GRC often depends on policies, documentation, and manual follow-up.
+---
 
-Governance Systems Engineering shifts GRC into systems, workflows, automation, and measurable controls.
+## The Problem
 
-## Why This Matters
+Most governance programs fail in execution.
 
-Governance fails when it relies only on people remembering to follow the process.
+Policies exist.  
+Processes exist.  
+Documentation exists.  
 
-This framework helps organizations design governance that is:
+But enforcement, consistency, and accountability break down in real environments.
 
-- Embedded into daily operations
-- Supported by workflows and approval gates
-- Measurable through dashboards and metrics
-- Connected to audit evidence
-- Built for repeatability and accountability
+Governance becomes dependent on people instead of systems.
 
-## Focus Areas
+---
+
+## The Shift
+
+Governance Systems Engineering introduces a different model:
+
+- Governance is embedded into systems, not documents  
+- Controls are enforced through workflows, not reminders  
+- Audit evidence is generated automatically  
+- Accountability is built into operations  
+
+If governance is not built into the system, it does not scale.
+
+---
+
+## What This Project Covers
+
+This repository is focused on building practical, real-world governance systems across:
 
 - Change Management Governance
-- CAB Readiness and Approval Workflows
-- RCA Accountability
-- Audit Readiness
+- CAB (Change Advisory Board) Systems
+- Root Cause Analysis (RCA) Accountability
+- Audit Readiness and Evidence Design
 - Risk and Control Visibility
-- Operational GRC Metrics
+- Operational GRC Metrics and Reporting
+
+---
 
 ## Repository Structure
 
-- `manifesto/` - Governance Systems Engineering principles and philosophy
-- `frameworks/` - Models, methods, and repeatable governance structures
-- `systems/` - Practical governance system designs
-- `templates/` - Reusable templates and checklists
-- `dashboards/` - Metrics and reporting concepts
-- `docs/` - Roadmap and supporting documentation
+- `manifesto/` → Core philosophy and principles
+- `frameworks/` → Governance system models and methods
+- `systems/` → Real-world system designs and implementations
+- `templates/` → Reusable governance templates and checklists
+- `dashboards/` → Metrics and reporting structures
+- `docs/` → Roadmap and supporting documentation
 
-## Initial Systems
+---
 
-This repository will begin with three practical systems:
+## Initial Systems Being Built
 
-1. Jira Governance System
-2. CAB Governance System
-3. RCA Governance System
+### 1. Jira Governance System
+Designing change management workflows that enforce governance through required fields, approvals, and validation gates.
+
+### 2. CAB Governance System
+Building a system that ensures only complete, validated, and risk-assessed changes reach approval.
+
+### 3. RCA Governance System
+Creating accountability by linking incidents, root causes, corrective actions, and controls.
+
+---
+
+## Why This Matters
+
+Organizations struggle with:
+
+- Inconsistent change management  
+- Weak enforcement of controls  
+- Audit failures due to missing or incomplete evidence  
+- Lack of accountability in incidents  
+
+This framework demonstrates how to solve these problems through system design.
+
+---
 
 ## Author
 
 Neviar Rawlinson  
-Governance Systems Engineering | GRC Engineering | IT Governance
+Governance Systems Engineering  
+IT Governance | GRC Engineering | Change Management

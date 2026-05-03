@@ -135,3 +135,39 @@ This system transforms RCA from a documentation exercise into an accountability 
 - SLA tracking for RCA completion
 - Risk scoring for recurring issues
 - Control mapping for audit frameworks
+
+---
+
+## System Flow Diagram
+
+```mermaid
+flowchart TD
+
+A[Incident / Failed Change Identified] --> B{RCA Required?}
+
+B -- No --> C[Document Resolution]
+B -- Yes --> D[Open RCA Record]
+
+D --> E[Capture Incident Summary]
+E --> F[Build Timeline of Events]
+F --> G[Perform Root Cause Analysis]
+
+G --> H{Root Cause Identified?}
+
+H -- No --> I[Continue Investigation]
+I --> G
+
+H -- Yes --> J[Identify Contributing Factors]
+J --> K[Define Corrective Actions]
+K --> L[Assign Owners and Due Dates]
+L --> M[Map to Related Controls / Risks]
+M --> N[Validate Remediation]
+
+N --> O{Actions Completed?}
+
+O -- No --> P[Track Open Actions]
+P --> N
+
+O -- Yes --> Q[Close RCA]
+Q --> R[Update Metrics / Trend Reporting]
+```

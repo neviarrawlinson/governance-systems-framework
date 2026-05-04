@@ -83,6 +83,19 @@ This framework demonstrates how to solve these problems through system design.
 
 ---
 
+## 🔧 Key Features
+
+- 📊 Real-time CAB Readiness Scoring
+- ⚠️ Automated Risk Classification (Low / Medium / High)
+- 🚫 Missing Control Detection (Rollback, QA, Monitoring, etc.)
+- 🤖 AI-Powered Governance Review
+- 📄 Auto-Generated Audit Reports (Markdown + JSON)
+- 🔁 Jira Integration Ready (ticket parsing + automation hooks)
+- 📚 Confluence Evidence Generation (planned)
+- ⚙️ Automation Engine (alerts, comments, CAB summaries)
+
+---
+
 ## 📸 Platform Screenshots
 
 ### Dashboard

@@ -1,0 +1,22 @@
+{
+  "key": "CMCC-1001",
+  "summary": "Production deployment for customer portal update",
+  "fields": {
+    "change_type": "Normal",
+    "environment": "Production",
+    "implementation_plan": "Deployment steps documented",
+    "validation_plan": "Post-deployment smoke testing documented",
+    "qa_plan": "QA completed in staging",
+    "monitoring_plan": "",
+    "rollback_plan": "Rollback to previous release package",
+    "risk_assessment": "Medium risk due to production impact",
+    "manager_approval": true,
+    "security_review_required": true,
+    "security_review_complete": false,
+    "compliance_review_required": true,
+    "compliance_review_complete": false,
+    "customer_impact": true,
+    "security_impact": true,
+    "compliance_impact": true
+  }
+}

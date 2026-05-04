@@ -81,6 +81,32 @@ with ui.column().classes("w-full items-center p-6"):
         missing_container = ui.column().classes("mt-4")
         recommendation_container = ui.column().classes("mt-4")
 
+        import json
+from pathlib import Path
+
+def load_sample_jira_ticket():
+    sample_path = Path("sample_inputs/jira_ticket_sample.json")
+
+    with open(sample_path, "r") as file:
+        ticket = json.load(file)
+
+    fields = ticket["fields"]
+
+    change_id.value = ticket.get("key", "")
+    title.value = ticket.get("summary", "")
+    environment.value = fields.get("environment", "Production")
+    change_type.value = fields.get("change_type", "Normal")
+
+    implementation_plan.value = bool(fields.get("implementation_plan"))
+    validation_plan.value = bool(fields.get("validation_plan"))
+    qa_plan.value = bool(fields.get("qa_plan"))
+    monitoring_plan.value = bool(fields.get("monitoring_plan"))
+    rollback_plan.value = bool(fields.get("rollback_plan"))
+    risk_assessment.value = bool(fields.get("risk_assessment"))
+    manager_approval.value = bool(fields.get("manager_approval"))
+
+    ui.notify("Sample Jira ticket loaded", type="positive")
+
     def run_validation():
         required = {
             "Implementation Plan": implementation_plan.value,
@@ -160,5 +186,7 @@ with ui.column().classes("w-full items-center p-6"):
                 ui.label("Recommendations: No additional actions required.").classes("font-semibold")
 
     ui.button("Run Governance Validation", on_click=run_validation).classes("mt-4")
+
+    ui.button("Load Sample Jira Ticket", on_click=load_sample_jira_ticket).classes("mt-2")
 
 ui.run()

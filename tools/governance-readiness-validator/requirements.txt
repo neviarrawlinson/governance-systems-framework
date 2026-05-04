@@ -1,0 +1,3 @@
+nicegui
+openai
+python-dotenv

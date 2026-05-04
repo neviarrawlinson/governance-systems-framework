@@ -1,0 +1,1 @@
+python -m web.nicegui_app

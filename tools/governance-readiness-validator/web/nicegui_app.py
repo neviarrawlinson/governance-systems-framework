@@ -1,6 +1,15 @@
+import os
+import datetime
+import json
+from pathlib import Path
+
 from nicegui import ui
+from ai.ai_reviewer import review_change_with_ai
 
 ui.page_title("Governance Readiness Validator")
+
+report_text_global = ""
+
 
 def generate_recommendations(missing, decision, risk_level):
     recommendations = []
@@ -35,6 +44,55 @@ def generate_recommendations(missing, decision, risk_level):
     return recommendations
 
 
+def generate_report_text(change_id, title, decision, score, risk, missing, recommendations, ai_review):
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    report = f"""# Governance Readiness Report
+
+## Metadata
+- Generated: {timestamp}
+- Change ID: {change_id}
+- Title: {title}
+
+## Results
+- Decision: {decision}
+- Score: {score}%
+- Risk Level: {risk}
+
+## Missing Requirements
+"""
+
+    if missing:
+        for item in missing:
+            report += f"- {item}\n"
+    else:
+        report += "- None\n"
+
+    report += "\n## Recommendations\n"
+
+    if recommendations:
+        for rec in recommendations:
+            report += f"- {rec}\n"
+    else:
+        report += "- None\n"
+
+    report += f"""
+
+## AI Governance Review
+
+{ai_review if ai_review else "AI review was not generated."}
+"""
+
+    return report
+
+
+def download_report():
+    if report_text_global:
+        ui.download(content=report_text_global, filename="governance_report.md")
+    else:
+        ui.notify("Run validation first", type="warning")
+
+
 with ui.column().classes("w-full items-center p-6"):
     ui.label("Governance Readiness Validator").classes("text-3xl font-bold")
     ui.label(
@@ -46,6 +104,11 @@ with ui.column().classes("w-full items-center p-6"):
 
         change_id = ui.input("Change ID", placeholder="CHG-001").classes("w-full")
         title = ui.input("Change Title", placeholder="Production deployment").classes("w-full")
+
+        change_description = ui.textarea(
+            "Change Description",
+            placeholder="Describe the change in detail..."
+        ).classes("w-full")
 
         environment = ui.select(
             ["Production", "Staging", "Corporate", "Development"],
@@ -69,6 +132,32 @@ with ui.column().classes("w-full items-center p-6"):
         risk_assessment = ui.checkbox("Risk Assessment Complete")
         manager_approval = ui.checkbox("Manager Approval Complete")
 
+        def load_sample_jira_ticket():
+            sample_path = Path("sample_inputs/jira_ticket_sample.json")
+
+            with open(sample_path, "r") as file:
+                ticket = json.load(file)
+
+            fields = ticket["fields"]
+
+            change_id.value = ticket.get("key", "")
+            title.value = ticket.get("summary", "")
+            change_description.value = ticket.get("summary", "")
+            environment.value = fields.get("environment", "Production")
+            change_type.value = fields.get("change_type", "Normal")
+
+            implementation_plan.value = bool(fields.get("implementation_plan"))
+            validation_plan.value = bool(fields.get("validation_plan"))
+            qa_plan.value = bool(fields.get("qa_plan"))
+            monitoring_plan.value = bool(fields.get("monitoring_plan"))
+            rollback_plan.value = bool(fields.get("rollback_plan"))
+            risk_assessment.value = bool(fields.get("risk_assessment"))
+            manager_approval.value = bool(fields.get("manager_approval"))
+
+            ui.notify("Sample Jira ticket loaded", type="positive")
+
+        ui.button("Load Sample Jira Ticket", on_click=load_sample_jira_ticket).classes("mt-4")
+
     with ui.card().classes("w-full max-w-4xl p-6 mt-4"):
         ui.label("Validation Results").classes("text-xl font-semibold")
 
@@ -80,34 +169,11 @@ with ui.column().classes("w-full items-center p-6"):
 
         missing_container = ui.column().classes("mt-4")
         recommendation_container = ui.column().classes("mt-4")
-
-        import json
-from pathlib import Path
-
-def load_sample_jira_ticket():
-    sample_path = Path("sample_inputs/jira_ticket_sample.json")
-
-    with open(sample_path, "r") as file:
-        ticket = json.load(file)
-
-    fields = ticket["fields"]
-
-    change_id.value = ticket.get("key", "")
-    title.value = ticket.get("summary", "")
-    environment.value = fields.get("environment", "Production")
-    change_type.value = fields.get("change_type", "Normal")
-
-    implementation_plan.value = bool(fields.get("implementation_plan"))
-    validation_plan.value = bool(fields.get("validation_plan"))
-    qa_plan.value = bool(fields.get("qa_plan"))
-    monitoring_plan.value = bool(fields.get("monitoring_plan"))
-    rollback_plan.value = bool(fields.get("rollback_plan"))
-    risk_assessment.value = bool(fields.get("risk_assessment"))
-    manager_approval.value = bool(fields.get("manager_approval"))
-
-    ui.notify("Sample Jira ticket loaded", type="positive")
+        ai_output_container = ui.column().classes("mt-4")
 
     def run_validation():
+        global report_text_global
+
         required = {
             "Implementation Plan": implementation_plan.value,
             "Validation Plan": validation_plan.value,
@@ -185,8 +251,35 @@ def load_sample_jira_ticket():
             else:
                 ui.label("Recommendations: No additional actions required.").classes("font-semibold")
 
+        ai_output_container.clear()
+
+        ai_review = review_change_with_ai(
+            change_description.value,
+            environment.value,
+            change_type.value,
+            missing,
+            risk_level
+        )
+
+        with ai_output_container:
+            ui.label("AI Governance Review").classes("font-semibold")
+            ui.markdown(ai_review)
+
+        report_text_global = generate_report_text(
+            change_id.value,
+            title.value,
+            decision,
+            score,
+            risk_level,
+            missing,
+            recommendations,
+            ai_review
+        )
+
     ui.button("Run Governance Validation", on_click=run_validation).classes("mt-4")
+    ui.button("Download Report", on_click=download_report).classes("mt-2")
 
-    ui.button("Load Sample Jira Ticket", on_click=load_sample_jira_ticket).classes("mt-2")
-
-ui.run()
+ui.run(
+    host="0.0.0.0",
+    port=int(os.environ.get("PORT", 8080))
+)
